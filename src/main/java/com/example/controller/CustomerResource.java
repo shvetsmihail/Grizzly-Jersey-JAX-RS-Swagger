@@ -59,21 +59,39 @@ public class CustomerResource {
     }
 
     @POST
-    @Path("/add")
-    @Operation(summary = "Add new customer")
+    @Path("/add/{id}")
+    @Operation(summary = "Add new customer", description = "Create new customer and put it to database")
     @RequestBody(
             description = "Customer that needs to be added",
             required = true,
             content = @Content(schema = @Schema(implementation = Customer.class)))
     @ApiResponse(responseCode = "201", description = "Successfully added")
     @ApiResponse(responseCode = "406", description = "Customer data not accepted")
-    public Response addCustomer(Customer customer, @Context UriInfo uriInfo) throws DataNotAcceptException {
-        service.add(customer);
+    public Response addCustomer(@Parameter(description = "New Customer id") @PathParam("id") long id,
+                                Customer customer,
+                                @Context UriInfo uriInfo) throws DataNotAcceptException {
+        service.add(id, customer);
         URI uri = uriInfo.getBaseUriBuilder()
                 .path(this.getClass())
-                .path(String.valueOf(customer.getId()))
+                .path(String.valueOf(id))
                 .build();
         return Response.created(uri).build();
+    }
+
+    @PUT
+    @Path("/update/{id}")
+    @Operation(summary = "Update existed customer")
+    @RequestBody(
+            description = "Customer that needs to be updated",
+            required = true,
+            content = @Content(schema = @Schema(implementation = Customer.class)))
+    @ApiResponse(responseCode = "200", description = "Successfully updated")
+    @ApiResponse(responseCode = "406", description = "Customer data not accepted")
+    public Response updateCustomer(@Parameter(description = "Customer id") @PathParam("id") long id,
+                                   Customer customer,
+                                   @Context UriInfo uriInfo) throws DataNotAcceptException {
+        service.update(id, customer);
+        return Response.ok().build();
     }
 
     @DELETE

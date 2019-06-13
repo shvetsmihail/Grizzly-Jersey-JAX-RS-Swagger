@@ -29,16 +29,23 @@ public class CustomerService {
         return customer;
     }
 
-    public void add(Customer customer) throws DataNotAcceptException {
-        if (customerRepository.get(customer.getId()) != null) {
-            throw new DataNotAcceptException(String.format("Customer with id = %d already exist", customer.getId()));
+    public void add(long id, Customer customer) throws DataNotAcceptException {
+        if (customerRepository.get(id) != null) {
+            throw new DataNotAcceptException(String.format("Customer with id = %d already exist", id));
         }
-        customerRepository.add(customer);
+        customerRepository.add(id, customer);
+    }
+
+    public void update(long id, Customer customer) throws DataNotAcceptException {
+        if (customerRepository.get(id) == null) {
+            throw new DataNotAcceptException(String.format("Customer with id = %d was not found", id));
+        }
+        customerRepository.update(id, customer);
     }
 
     public void delete(long id) throws DataNotFoundException {
         if (customerRepository.get(id) == null) {
-            throw new DataNotFoundException(String.format("No customer with id = %d was found", id));
+            throw new DataNotFoundException(String.format("No customer with id = %d was not found", id));
         }
         customerRepository.delete(id);
     }

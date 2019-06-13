@@ -19,11 +19,10 @@ public class App {
         String appContext = "/myapp/";
 
         String baseUri = protocol + host + ":" + port + appContext;
-        String swaggerRelativeUrl = appContext + "docs";
-
         HttpServer server = startServer(baseUri);
         LOG.info("monitor.mail.service app started at {}:{}", host, port);
 
+        String swaggerRelativeUrl = appContext + "docs";
         addSwaggerUIMapping(server, swaggerRelativeUrl);
 
         Thread.currentThread().join();
@@ -31,7 +30,6 @@ public class App {
 
     private static HttpServer startServer(String appUrl) {
         String[] packagesToScan = {"com.example"};
-
         // create a resource config that scans for JAX-RS resources and providers
         final ResourceConfig resourceConfig = new ResourceConfig()
                 .packages(packagesToScan)

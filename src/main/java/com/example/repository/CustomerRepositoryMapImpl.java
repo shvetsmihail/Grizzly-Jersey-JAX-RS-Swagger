@@ -26,8 +26,13 @@ public class CustomerRepositoryMapImpl implements CustomerRepository {
     }
 
     @Override
-    public void add(Customer customer) {
-        map.put(customer.getId(), customer);
+    public void add(long id, Customer customer) {
+        map.put(id, customer);
+    }
+
+    @Override
+    public void update(long id, Customer customer) {
+        add(id, customer);
     }
 
     @Override
@@ -38,14 +43,14 @@ public class CustomerRepositoryMapImpl implements CustomerRepository {
     private void init() {
         map = new ConcurrentHashMap<>();
 
-        Customer c2 = new Customer(101, "Anna", LocalDate.parse("1985-02-14"), "female");
-        Customer c3 = new Customer(102, "James", LocalDate.parse("1990-05-23"), "male");
-        Customer c4 = new Customer(103, "Maria", LocalDate.parse("1995-07-08"), "female");
-        Customer c1 = new Customer(104, "George", LocalDate.parse("1980-10-01"), "male");
+        Customer c2 = new Customer("Anna", LocalDate.parse("1985-02-14"), "female");
+        Customer c3 = new Customer("James", LocalDate.parse("1990-05-23"), "male");
+        Customer c4 = new Customer("Maria", LocalDate.parse("1995-07-08"), "female");
+        Customer c1 = new Customer("George", LocalDate.parse("1980-10-01"), "male");
 
-        map.put(c1.getId(), c1);
-        map.put(c2.getId(), c2);
-        map.put(c3.getId(), c3);
-        map.put(c4.getId(), c4);
+        map.put(101L, c1);
+        map.put(102L, c2);
+        map.put(103L, c3);
+        map.put(104L, c4);
     }
 }

@@ -9,7 +9,9 @@ public interface CustomerRepository {
 
     Customer get(long id);
 
-    void add(Customer customer);
+    void add(long id, Customer customer);
+
+    void update(long id, Customer customer);
 
     void delete(long id);
 }

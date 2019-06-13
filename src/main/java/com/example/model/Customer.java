@@ -14,9 +14,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Schema(name = "Customer", description = "this is example of Customer object")
 public class Customer {
-    @Schema(description = "Customer id", required = true, example = "100")
-    private long id;
-
     @Schema(description = "Customer name", required = true, example = "Bart Simpson")
     private String name;
 
