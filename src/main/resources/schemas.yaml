@@ -1,0 +1,18 @@
+openAPI:
+  components:
+    schemas:
+      MongoEntity:
+        description: Some additional schema our model does not have
+        type: object
+        properties:
+          _id:
+            type: object
+            properties:
+              $oid:
+                type: string
+                description: ObjectID
+                example: 59244e5858cb3e2598460ed3
+          name:
+            type: string
+            description: Object name
+            example: Bart Simpson

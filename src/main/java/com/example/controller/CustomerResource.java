@@ -30,42 +30,32 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 @ApiResponse(responseCode = "500", description = "Internal server exception")
 public class CustomerResource {
+    private CustomerService service;
 
     @Inject
-    private CustomerService service;
+    public CustomerResource(CustomerService service) {
+        this.service = service;
+    }
 
     @GET
     @Path("/all")
     @Operation(summary = "Get customers", description = "Get list of customers")
-    @ApiResponse(
-            responseCode = "200", description = "List of customers",
-            content = @Content(array = @ArraySchema(schema = @Schema(implementation = Customer.class)))
-    )
-    @ApiResponse(responseCode = "404", description = "No customers found")
-    public Response getAllCustomers() throws DataNotFoundException {
+    @ApiResponse(responseCode = "200", description = "List of customers",
+            content = @Content(array = @ArraySchema(schema = @Schema(implementation = Customer.class))))
+    public Response getAllCustomers() {
         List<Customer> all = service.getAll();
-        if (all == null || all.isEmpty()) {
-            return Response.noContent().build();
-        }
         return Response.ok(all).build();
     }
 
     @GET
-    @Path("{id}")
+    @Path("/{id}")
     @Operation(summary = "Get customer by id", description = "Using id getting customer info from database")
-    @ApiResponse(
-            responseCode = "200", description = "The Customer",
-            content = @Content(schema = @Schema(implementation = Customer.class))
-    )
+    @ApiResponse(responseCode = "200", description = "The Customer",
+            content = @Content(schema = @Schema(implementation = Customer.class)))
     @ApiResponse(responseCode = "404", description = "No customers found")
-    public Response getCustomer(
-            @Parameter(description = "Customer id") @PathParam("id") long id) throws DataNotFoundException {
+    public Response getCustomer(@Parameter(description = "Customer id") @PathParam("id") long id) throws DataNotFoundException {
         Customer customer = service.get(id);
-        if (customer != null) {
-            return Response.ok(customer).build();
-        } else {
-            return Response.noContent().build();
-        }
+        return Response.ok(customer).build();
     }
 
     @POST
@@ -83,12 +73,11 @@ public class CustomerResource {
                 .path(this.getClass())
                 .path(String.valueOf(customer.getId()))
                 .build();
-
         return Response.created(uri).build();
     }
 
     @DELETE
-    @Path("{id}")
+    @Path("/{id}")
     @Operation(summary = "Get customer by id")
     @ApiResponse(responseCode = "200", description = "The Customer was delete successfully")
     @ApiResponse(responseCode = "404", description = "No customers found")
